@@ -1,4 +1,4 @@
-const App = () => {
+const Hello = () => {
   return (
     <div>
       <p>Hello world</p>
@@ -6,4 +6,13 @@ const App = () => {
   );
 };
 
+const App = () => {
+  return (
+    <div>
+      <h1>Greetings</h1>
+
+      <Hello />
+    </div>
+  );
+};
 export default App;
