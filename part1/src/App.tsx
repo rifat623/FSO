@@ -1,57 +1,91 @@
-import { Part } from "./components/Part";
-import Header from "./components/Header";
-import React from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
 
-export interface ContentProps {
-  parts: { name: string; exercises: number }[];
+interface StatisticProps {
+  all: number;
+  average: number;
+  positive: number;
+  good: number;
+  neutral: number;
+  bad: number;
+}
+interface StatisticLineProps {
+  text: string;
+  value: number;
 }
 
-export interface Part {
-  name: string;
-  exercises: number;
-}
-
-const course = {
-  name: "Halff Stack application development",
-  parts: [
-    {
-      name: "Fundamentals of React",
-      exercises: 10,
-    },
-    {
-      name: "Using props to pass data",
-      exercises: 7,
-    },
-    {
-      name: "State of a component",
-      exercises: 14,
-    },
-  ],
+const Statistics = ({
+  all,
+  average,
+  positive,
+  good,
+  neutral,
+  bad,
+}: StatisticProps) => {
+  return (
+    <div>
+      {all > 0 ? (
+        <div>
+          <StatisticLine text="good" value={good} />
+          <StatisticLine text="neutral" value={neutral} />
+          <StatisticLine text="bad" value={bad} />
+          <StatisticLine text="all" value={all} />
+          <StatisticLine text="average" value={average} />
+          <StatisticLine text="positive" value={positive} />
+        </div>
+      ) : (
+        <h4>No feedback given</h4>
+      )}
+    </div>
+  );
 };
 
-const Content = ({}: ContentProps) => {
-  <div>
-    <Part name={course.parts[0].name} num={course.parts[0].exercises} />
-    <Part name={course.parts[1].name} num={course.parts[1].exercises} />
-    <Part name={course.parts[2].name} num={course.parts[2].exercises} />
-  </div>;
+const Button = ({
+  handleClick,
+  text,
+}: {
+  handleClick: () => void;
+  text: string;
+}) => {
+  return <button onClick={handleClick}>{text}</button>;
 };
 
-const Total = () => {
-  <p>
-    Number of exercises{" "}
-    {course.parts[0].exercises +
-      course.parts[1].exercises +
-      course.parts[2].exercises}
-  </p>;
+const StatisticLine = ({ text, value }: StatisticLineProps) => {
+  return (
+    <div>
+      <h4>
+        {text}: {value}
+      </h4>
+    </div>
+  );
 };
 
 const App = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+  const [all, setAll] = useState(0);
+  const [score, setScore] = useState(0);
+
+  useEffect(() => {
+    setAll(good + neutral + bad);
+  }, [good, neutral, bad]);
+
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      {/* <Total parts={course.parts} /> */}
+      <h1>Give Feedback</h1>
+      <Button handleClick={() => setGood(good + 1)} text="good" />
+      <Button handleClick={() => setNeutral(neutral + 1)} text="neutral" />
+      <Button handleClick={() => setBad(bad + 1)} text="bad" />
+      <h1>Statistics</h1>
+      <Statistics
+        good={good}
+        bad={bad}
+        neutral={neutral}
+        all={all}
+        average={score / all}
+        positive={good / all}
+      />
     </div>
   );
 };
