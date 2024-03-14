@@ -1,3 +1,6 @@
+import Content from "./Content";
+import Header from "./Header";
+
 interface Props {
   course: {
     id: number;
@@ -11,7 +14,12 @@ interface Props {
 }
 
 function Course({ course }: Props) {
-  return <div>Rifat</div>;
+  return (
+    <div>
+      <Header name={course.name} />
+      <Content content={course.parts} />
+    </div>
+  );
 }
 
 export default Course;
