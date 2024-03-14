@@ -14,10 +14,14 @@ interface Props {
 }
 
 function Course({ course }: Props) {
+  const total = course.parts.reduce((total, part) => total + part.exercises, 0);
+
   return (
     <div>
       <Header name={course.name} />
       <Content content={course.parts} />
+      <br />
+      <strong>Total of {total} exercises</strong>
     </div>
   );
 }
